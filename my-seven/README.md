@@ -59,5 +59,60 @@ Join our community of developers creating universal apps.
 ```
 npm install nativewind react-native-reanimated react-native-safe-area-context
 npm install --dev tailwindcss@^3.4.17 prettier-plugin-tailwindcss@^0.5.11 babel-preset-expo
+
+npx tailwindcss init
+```
+## tailwind.config.js
+```
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  presets: [require("nativewind/preset")],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
+
+## global.css
+```
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+## babel.config.js
+```
+module.exports = function (api) {
+  api.cache(true);
+  return {
+    presets: [
+      ["babel-preset-expo", { jsxImportSource: "nativewind" }],
+      "nativewind/babel",
+    ],
+  };
+};
+```
+
+## metro.config.js
+```
+const { getDefaultConfig } = require("expo/metro-config");
+const { withNativeWind } = require('nativewind/metro');
+
+const config = getDefaultConfig(__dirname);
+
+module.exports = withNativeWind(config, { input: './src/global.css' });
+```
+
+## app.json
+```
+{
+  "expo": {
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
 ```
 
