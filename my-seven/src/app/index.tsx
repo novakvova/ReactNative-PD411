@@ -13,6 +13,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {ILoginType} from "@/types/login/ILoginType";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {LoginSchema} from "@/schemas/LoginSchema";
+import axios from "axios";
 
 export default function HomeScreen() {
     const defaultValues: ILoginType = {
@@ -29,9 +30,16 @@ export default function HomeScreen() {
         defaultValues: defaultValues,
     });
 
+    const url = "https://webpd411.itstep.click/api/account/login";
 
-    const myOnSubmit = (data: ILoginType) => {
+    const myOnSubmit = async (data: ILoginType) => {
         console.log("Login user in Form", data);
+        try {
+            const result = await axios.post(url, data);
+            console.log("Login user in Form", result);
+        } catch (e) {
+            console.log("Login request error", e);
+        }
     };
 
     return (

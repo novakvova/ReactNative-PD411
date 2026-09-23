@@ -1,0 +1,38 @@
+version: "3.9"
+
+networks:
+  webpd411Net:
+    driver: bridge
+
+services:
+  postgrespd411ServerDb:
+    image: postgres:18.1
+    container_name: webpd411Net_db
+    restart: always
+    ports:
+      - "5411:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ${VOLUME_POSTGRES}
+    networks:
+      - webpd411Net
+    
+  api:
+    #build: ./WebApiTransfer
+    image: novakvova/webpd411:latest
+    container_name: webpd411-api
+    volumes:
+      - ${VOLUME_SERVERAPI}
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: Host=postgrespd411ServerDb;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+    ports:
+      - "8411:8080"
+    depends_on:
+      - postgrespd411ServerDb
+    networks:
+      - webpd411Net
+     
