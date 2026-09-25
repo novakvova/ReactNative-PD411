@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using WebApiDotNet.Data;
 using WebApiDotNet.Data.Entities;
 using WebApiDotNet.Extensions;
@@ -26,6 +27,7 @@ builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
     .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+builder.Services.AddScoped<IImageService, ImageOptimizationService>();
 
 
 builder.Services.AddControllers();
@@ -33,6 +35,23 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+try
+{
+    var myImage = builder.Configuration.GetRequiredSection("ImagesDir").Get<string>() ?? "myimages";
+    string path = Path.Combine(Directory.GetCurrentDirectory(), myImage);
+    Directory.CreateDirectory(path); //автоматично стоврить images
+
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(path),
+        RequestPath = $"/{myImage}"
+    });
+}
+catch (Exception ex)
+{
+    Console.WriteLine("Помилка запуску" + ex.Message);
+}
 
 app.UseSwagger();
 app.UseSwaggerUI();
