@@ -13,6 +13,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {ILoginType} from "@/types/login/ILoginType";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {LoginSchema} from "@/schemas/LoginSchema";
+import {router} from "expo-router";
 import axios from "axios";
 
 export default function LoginScreen() {
@@ -84,7 +85,7 @@ export default function LoginScreen() {
                         </Pressable>
 
                         <Pressable
-                            onPress={() => console.log("To register")}
+                            onPress={() => router.replace("/explore")}
                             className={`flex-1 items-center rounded-lg py-3 bg-transparent`}
                         >
                             <Text
