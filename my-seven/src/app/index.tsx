@@ -15,7 +15,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {LoginSchema} from "@/schemas/LoginSchema";
 import axios from "axios";
 
-export default function HomeScreen() {
+export default function LoginScreen() {
     const defaultValues: ILoginType = {
         email: '',
         password: '',
