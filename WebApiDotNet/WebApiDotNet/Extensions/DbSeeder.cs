@@ -5,6 +5,7 @@ using System.Text.Json;
 using WebApiDotNet.Constants;
 using WebApiDotNet.Data;
 using WebApiDotNet.Data.Entities;
+using WebApiDotNet.Interfaces;
 using WebApiDotNet.Models.Seeder;
 
 namespace WebApiDotNet.Extensions;
@@ -18,6 +19,7 @@ public static class DbSeeder
         var context = scope.ServiceProvider.GetRequiredService<MyDatabaseContext>();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<RoleEntity>>();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserEntity>>();
+        var imageService = scope.ServiceProvider.GetRequiredService<IImageService>();
 
         context.Database.Migrate();
 
@@ -46,9 +48,12 @@ public static class DbSeeder
                             FirstName = user.FirstName,
                             LastName = user.LastName,
                             Email = user.Email,
-                            UserName = user.Email,
-                            Image = user.Image,
+                            UserName = user.Email
                         };
+                        if(!string.IsNullOrEmpty(user.Image))
+                            entity.Image = 
+                                await imageService.SaveImageFromUrlAsync(user.Image);
+
                         var result = await userManager.CreateAsync(entity, user.Password);
                         if (result.Succeeded)
                         {

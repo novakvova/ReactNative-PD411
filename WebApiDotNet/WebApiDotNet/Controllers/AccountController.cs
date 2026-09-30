@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Claims;
 using WebApiDotNet.Constants;
 using WebApiDotNet.Data.Entities;
 using WebApiDotNet.Interfaces;
@@ -61,5 +63,29 @@ public class AccountController(
         {
             return BadRequest(new { Error = ex.Message });
         }
+    }
+
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> Profile()
+    {
+        var email = User.FindFirstValue(ClaimTypes.Email)
+            ?? User.FindFirstValue("email");
+        if (string.IsNullOrEmpty(email))
+            return Unauthorized(new { error = "Користувача не знайдено!" });
+        var user = await userManager.FindByEmailAsync(email);
+        if (user == null)
+            return NotFound(new { error = "Користувач відсутній!" });
+        var roles = await userManager.GetRolesAsync(user);
+        var model = new ProfileModel
+        {
+            Id = user.Id,
+            Email = email,
+            FirstName = user.FirstName ?? string.Empty,
+            LastName = user.LastName ?? string.Empty,
+            Image = user.Image ?? string.Empty,
+            Roles = roles
+        };
+        return Ok(model);
     }
 }
