@@ -37,7 +37,7 @@ export default function LoginScreen() {
         console.log("Login user in Form", data);
         try {
             const result = await axios.post(url, data);
-            console.log("Login user in Form", result);
+            console.log("Login user in Form", result.data);
         } catch (e) {
             console.log("Login request error", e);
         }
