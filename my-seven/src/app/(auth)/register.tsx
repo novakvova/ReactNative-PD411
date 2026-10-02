@@ -1,4 +1,4 @@
-import {useState} from 'react';
+
 import {
   KeyboardAvoidingView,
   Platform,
@@ -10,10 +10,7 @@ import {
 } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {ILoginType} from "@/types/login/ILoginType";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {LoginSchema} from "@/schemas/LoginSchema";
-import axios from "axios";
 import {RegisterSchema} from "@/schemas/RegisterSchema";
 import {IRegister} from "@/types/register/IRegister";
 import {router} from "expo-router";
@@ -111,7 +108,7 @@ export default function RegisterScreen() {
             {/* Login / Register switch */}
             <View className="mb-7 flex-row rounded-xl bg-[#242424] p-1">
               <Pressable
-                  onPress={() => router.replace("/")}
+                  onPress={() => router.replace("/login")}
                   className={`flex-1 items-center rounded-lg py-3 bg-transparent`}
               >
                 <Text
