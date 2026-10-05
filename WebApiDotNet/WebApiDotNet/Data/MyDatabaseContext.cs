@@ -12,6 +12,10 @@ public class MyDatabaseContext
     {
         
     }
+    public DbSet<TaskStatusEntity> TaskStatuses { get; set; }
+    public DbSet<TaskPriorityEntity> TaskPriorities { get; set; }
+    public DbSet<TaskEntity> Tasks { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
