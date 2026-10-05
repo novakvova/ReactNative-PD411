@@ -19,6 +19,9 @@ public class MyDatabaseContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        //пропускає видалені задачі
+        modelBuilder.Entity<TaskEntity>().HasQueryFilter(t => !t.IsDeleted);
+
         //identity
         modelBuilder.Entity<UserRoleEntity>()
             .HasOne(ur => ur.User)
