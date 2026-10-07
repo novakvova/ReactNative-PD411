@@ -35,8 +35,8 @@ export default function ProfileScreen() {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-
                 setProfile(response.data);
+                console.log("User profile data:", response.data);
             } catch (error: any) {
                 console.error("Помилка завантаження профілю:", error);
 
@@ -84,7 +84,7 @@ export default function ProfileScreen() {
                     <View className="mb-4 h-28 w-28 items-center justify-center rounded-full bg-[#1c1c1c] border-2 border-[#333] overflow-hidden">
                         {profile?.image ? (
                             <Image
-                                source={{ uri: profile.image }}
+                                source={{ uri: `https://webpd411.itstep.click/images/${profile.image}_1280.webp` }}
                                 className="h-full w-full"
                                 resizeMode="cover"
                             />
