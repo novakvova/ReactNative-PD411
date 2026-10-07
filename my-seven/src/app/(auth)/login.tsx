@@ -38,7 +38,7 @@ export default function LoginScreen() {
         try {
             const result = await axios.post(url, data);
             await SecureStore.setItemAsync('userToken',  result.data.token);
-            router.replace("/profile")
+            router.replace("/home")
             // console.log("Login user in Form", result.data);
         } catch (e) {
             console.log("Login request error", e);
