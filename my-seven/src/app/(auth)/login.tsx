@@ -13,6 +13,7 @@ import {ILoginType} from "@/types/login/ILoginType";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {LoginSchema} from "@/schemas/LoginSchema";
 import {router} from "expo-router";
+import * as SecureStore from "expo-secure-store";
 import axios from "axios";
 
 export default function LoginScreen() {
@@ -36,7 +37,9 @@ export default function LoginScreen() {
         console.log("Login user in Form", data);
         try {
             const result = await axios.post(url, data);
-            console.log("Login user in Form", result.data);
+            await SecureStore.setItemAsync('userToken',  result.data.token);
+            router.replace("/profile")
+            // console.log("Login user in Form", result.data);
         } catch (e) {
             console.log("Login request error", e);
         }
